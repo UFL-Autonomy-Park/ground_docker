@@ -11,13 +11,19 @@ ENV ROS_DISTRO=${ROS_DISTRO}
 
 SHELL ["/bin/bash", "-c"]
 
+# Install platform-specific packages
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ros-${ROS_DISTRO}-microstrain-inertial-driver \
+    ros-${ROS_DISTRO}-velodyne
+RUN python3 -m pip install --no-cache-dir nmea-parser==0.5.0
+
 # Fast DDS Discovery Server super-client profile.
 COPY config/fastdds/super_client_config.xml \
     /etc/fastdds/super_client_config.xml
 
 COPY docker/ros_entrypoint.sh \
-    /sbin/homebrew_ros_entrypoint.sh
+    /sbin/ground_ros_entrypoint.sh
 
-RUN chmod 755 /sbin/homebrew_ros_entrypoint.sh
+RUN chmod 755 /sbin/ground_ros_entrypoint.sh
 
-ENTRYPOINT ["/sbin/homebrew_ros_entrypoint.sh"]
+ENTRYPOINT ["/sbin/ground_ros_entrypoint.sh"]
