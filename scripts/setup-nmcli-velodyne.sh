@@ -46,7 +46,7 @@ else
         ifname "$INTERFACE"
 fi
 
-
+# Modify either the newly created connection or the existing one
 nmcli connection modify "$PROFILE_NAME" \
     802-3-ethernet.mac-address "$ADAPTER_MAC" \
     ipv4.method manual \

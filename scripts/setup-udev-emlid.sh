@@ -19,12 +19,12 @@ fi
 echo -e "${GREEN}=== Emlid udev Rule Setup ===${NC}"
 echo ""
 
-# FTDI device detected on your system
+# FTDI device info
 VENDOR_ID="3032"
 PRODUCT_ID="0010"
 SYMLINK_NAME="emlid"
 
-UDEV_RULES_FILE="/etc/udev/rules.d/99-emlid.rules"
+UDEV_RULES_FILE="/etc/udev/rules.d/98-emlid.rules"
 
 echo "Device Info:"
 echo "  Vendor ID:  $VENDOR_ID"
@@ -32,11 +32,11 @@ echo "  Product ID: $PRODUCT_ID"
 echo "  Symlink:    /dev/$SYMLINK_NAME"
 echo ""
 
-# Create the udev rule with serial number for extra specificity
+# Create the udev rule
 echo -e "${YELLOW}Creating udev rule...${NC}"
 cat <<EOF > $UDEV_RULES_FILE
 # Emlid Reach M+ GPS Unit
-SUBSYSTEMS=="usb", KERNEL=="ttyACM[0-9]*", ACTION=="add", ATTRS{idVendor}=="$VENDOR_ID", ATTRS{idProduct}=="$PRODUCT_ID", MODE="666", SYMLINK+="$SYMLINK_NAME", GROUP+="dialout"
+SUBSYSTEMS=="tty", KERNEL=="ttyACM[0-9]*", ACTION=="add", ATTRS{idVendor}=="$VENDOR_ID", ATTRS{idProduct}=="$PRODUCT_ID", MODE="0666", SYMLINK+="$SYMLINK_NAME", GROUP+="dialout"
 EOF
 
 echo -e "${GREEN}udev rule created: $UDEV_RULES_FILE${NC}"
@@ -47,6 +47,7 @@ echo ""
 echo -e "${YELLOW}Reloading udev rules...${NC}"
 udevadm control --reload-rules
 udevadm trigger
+udevadm settle
 
 echo ""
 echo -e "${GREEN}=== Setup Complete! ===${NC}"

@@ -1,0 +1,8 @@
+SUBSYSTEMS=="usb" \
+, KERNEL=="ttyACM[0-9]*" \
+, ACTION=="add" \
+, ATTRS{idProduct}=="0010" \
+, ATTRS{idVendor}=="3032" \
+, MODE="666" \
+, SYMLINK+="emlid" \
+, GROUP="dialout"

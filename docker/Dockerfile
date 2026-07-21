@@ -14,7 +14,8 @@ SHELL ["/bin/bash", "-c"]
 # Install platform-specific packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-${ROS_DISTRO}-microstrain-inertial-driver \
-    ros-${ROS_DISTRO}-velodyne
+    ros-${ROS_DISTRO}-velodyne \
+    ros-${ROS_DISTRO}-robot-localization
 RUN python3 -m pip install --no-cache-dir nmea-parser==0.5.0
 
 # Fast DDS Discovery Server super-client profile.
