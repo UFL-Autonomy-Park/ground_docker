@@ -4,7 +4,7 @@ set -e
 source "/opt/ros/${ROS_DISTRO}/setup.bash"
 source "/opt/ros/${ROS_DISTRO}/install/setup.bash"
 source "/root/ros2_ws/install/setup.bash"
-source "/root/homebrew_ws/install/setup.bash"
+source "/root/ground_ws/install/setup.bash"
 
 export ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-0}"
 export ROS_LOCALHOST_ONLY="${ROS_LOCALHOST_ONLY:-0}"

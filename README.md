@@ -20,7 +20,7 @@ Build the ROS 2 Humble, ZED SDK v5.0.0, L4T r36.3.0 base image
 Let `${ROBOT_TYPE}` denote your platform. Valid options are `b1,go1,husky,jackal`
 ```bash
 # 1. Clone and configure
-git clone https://github.com/UFL-Autonomy-Park/ground_docker.git  && cd homebrew_docker
+git clone https://github.com/UFL-Autonomy-Park/ground_docker.git  && cd ground_docker
 cp .env.${ROBOT_TYPE}$ .env
 # Edit .env with your settings
 ```
