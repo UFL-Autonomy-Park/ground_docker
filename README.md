@@ -16,7 +16,7 @@ Build the ROS 2 Humble, ZED SDK v5.0.0, L4T r36.3.0 base image
 	zedsdk-5.0.0
 ```
 
-## Setup
+## Pull Repo
 Let `${ROBOT_TYPE}` denote your platform. Valid options are `b1,go1,husky,jackal`
 ```bash
 # 1. Clone and configure
@@ -25,6 +25,8 @@ cp .env.${ROBOT_TYPE}$ .env
 # Edit .env with your settings
 ```
 
+## Hardware
+### Sensors: Zed
 Set up your Zed camera with a factory calibration file before launching. Get your serial number by plugging in the Zed to the Jetson and running
 ```bash
 lsusb -v 2>/dev/null | grep -A20 -i stereolabs
@@ -41,5 +43,35 @@ curl -fL \
 
 If you are the first person setting up the Zed, print the serial number using the label maker and attach it to the Zed so the next person does not have to do this
 
+### Sensors: Microstrain
+Microstrain udev
+
+### Sensors: LiDAR
+LiDAR nmcli
+
+### Sensors: GPS
+Emlid udev, make sure plugged into USB to Ethernet adapter
+
+### Base: Unitree
+Unitree nmcli, make sure plugged into main Ethernet port
+
+## Build and Run
+Build the image and run the container
+```bash
+sudo docker compose build
+sudo docker compose up -d
+```
+
+## Optional: Auto-start on boot
+```bash
+sudo chmod +x /scripts/setup-autostart.sh
+sudo ./scripts/setup-autostart.sh
+```
+
+
+## Notes
+When running this image for the first time, the Zed AI models will need to download. Ensure the Jetson is connected to the internet. After the models are successfully downloaded, you can run the container on LAN only. 
+
+ALWAYS DOUBLE CHECK THE DISCOVERY SERVER IP IN `/config/fastdds/super_client_config.xml`
+
 ## TO-DO:
-- Install all required ROS packages that must be pulled from GitHub (`minimal_startup_ground`, `emlid_interface`, `holonomic_interpreter`, the Unitree pkgs, and the Clearpath pkgs)

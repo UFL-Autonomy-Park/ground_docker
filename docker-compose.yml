@@ -1,0 +1,46 @@
+services:
+  homebrew_bringup:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      network: host
+      args:
+        BASE_IMAGE: ${BASE_IMAGE:-zed_ros2_l4t_36.3.0_sdk_5.0.0}
+
+    image: ufl-autonomy-park/${PLATFORM}-${MODEL}-jetson:${IMAGE_TAG:-dev}
+    container_name: ${CONTAINER_NAME:-autonomypark}
+
+    runtime: nvidia
+    network_mode: host
+    ipc: host
+    privileged: true
+    volumes:
+      - /dev:/dev
+      - ./config/zed/SN${ZED_SERIAL}.conf:/usr/local/zed/settings/SN${ZED_SERIAL}.conf:ro
+      - zed_resources:/usr/local/zed/resources
+
+    restart: unless-stopped
+    environment:
+      ROS_DOMAIN_ID: "${ROS_DOMAIN_ID:-0}"
+      ROS_LOCALHOST_ONLY: "${ROS_LOCALHOST_ONLY:-0}"
+      RMW_IMPLEMENTATION: "${RMW_IMPLEMENTATION:-rmw_fastrtps_cpp}"
+      USE_DISCOVERY_SERVER: "${USE_DISCOVERY_SERVER:-false}"
+
+    command:
+      - ros2
+      - launch
+      - minimal_startup_ground
+      - robot.launch.py
+      - "platform:=${PLATFORM}"
+      - "model:=${MODEL}"
+      - "robot_namespace:=${ROBOT_NAMESPACE}"
+      - "launch_microstrain:=${LAUNCH_MICROSTRAIN}"
+      - "launch_emlid:=${LAUNCH_EMLID}"
+      - "launch_zed:=${LAUNCH_ZED}"
+      - "zed_model:=${ZED_MODEL}"
+      - "zed_camera_name:=${ZED_CAMERA_NAME}"
+      - "zed_namespace:=${ZED_NAMESPACE}"
+      - "launch_velodyne:=${LAUNCH_VELODYNE}"
+
+volumes:
+  zed_resources:

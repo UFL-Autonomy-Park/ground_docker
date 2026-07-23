@@ -1,0 +1,20 @@
+repositories:
+  minimal_startup_ground:
+    type: git
+    url: https://github.com/UFL-Autonomy-Park/minimal_startup_ground.git
+    version: main
+
+  holonomic_interpreter:
+    type: git
+    url: https://github.com/UFL-Autonomy-Park/holonomic_interpreter.git
+    version: main
+
+  emlid_interface:
+    type: git
+    url: https://github.com/UFL-Autonomy-Park/emlid_interface.git
+    version: main
+
+  unitree_interfaces:
+    type: git
+    url: https://github.com/UFL-Autonomy-Park/unitree_interfaces.git
+    version: main
