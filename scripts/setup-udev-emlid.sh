@@ -21,7 +21,7 @@ echo ""
 
 # FTDI device info
 VENDOR_ID="3032"
-PRODUCT_ID="0010"
+PRODUCT_ID="0012"
 SYMLINK_NAME="emlid"
 
 UDEV_RULES_FILE="/etc/udev/rules.d/98-emlid.rules"

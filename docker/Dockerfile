@@ -22,12 +22,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-pip \
     python3-vcstool \
     python3-colcon-common-extensions \
+    ros-${ROS_DISTRO}-rosidl-default-generators \
     ros-${ROS_DISTRO}-microstrain-inertial-driver \
     ros-${ROS_DISTRO}-velodyne \
     ros-${ROS_DISTRO}-robot-localization \
     && rm -rf /var/lib/apt/lists/*
 
-RUN python3 -m pip install --no-cache-dir nmea-parser==0.5.0
+RUN python3 -m pip install --no-cache-dir --index-url https://pypi.org/simple nmea-parser==0.5.0
 
 RUN mkdir -p $GROUND_WS
 
@@ -37,6 +38,16 @@ COPY config/ground.repos /tmp/ground.repos
 
 RUN mkdir -p src && \
     vcs import src < /tmp/ground.repos
+    
+# rosdep
+RUN apt-get update && \
+    source /opt/ros/${ROS_DISTRO}/setup.bash && \
+    rosdep install \
+        --from-paths ${GROUND_WS}/src \
+        --ignore-src \
+        --rosdistro ${ROS_DISTRO} \
+        -r -y && \
+    rm -rf /var/lib/apt/lists/*
 
 # Build workspace
 RUN source /opt/ros/${ROS_DISTRO}/setup.bash && \
