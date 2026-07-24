@@ -36,7 +36,7 @@ echo ""
 echo -e "${YELLOW}Creating udev rule...${NC}"
 cat <<EOF > $UDEV_RULES_FILE
 # Emlid Reach M+ GPS Unit
-SUBSYSTEMS=="tty", KERNEL=="ttyACM[0-9]*", ACTION=="add", ATTRS{idVendor}=="$VENDOR_ID", ATTRS{idProduct}=="$PRODUCT_ID", MODE="0666", SYMLINK+="$SYMLINK_NAME", GROUP+="dialout"
+SUBSYSTEM=="tty", KERNEL=="ttyACM[0-9]*", ATTRS{idVendor}=="$VENDOR_ID", ATTRS{idProduct}=="$PRODUCT_ID", MODE:="0666", SYMLINK+="$SYMLINK_NAME", GROUP+="dialout"
 EOF
 
 echo -e "${GREEN}udev rule created: $UDEV_RULES_FILE${NC}"
