@@ -21,7 +21,7 @@ Let `${ROBOT_TYPE}` denote your platform. Valid options are `b1,go1,husky,jackal
 ```bash
 # 1. Clone and configure
 git clone https://github.com/UFL-Autonomy-Park/ground_docker.git  && cd ground_docker
-cp .env.${ROBOT_TYPE}$ .env
+cp ".env.${ROBOT_TYPE}$" .env
 # Edit .env with your settings
 ```
 
@@ -34,7 +34,7 @@ lsusb -v 2>/dev/null | grep -A20 -i stereolabs
 
 Use the 8-digit number and run
 ```bash
-mkdir -p /config/zed
+mkdir -p config/zed
 ZED_SERIAL=${YOUR_ZED_SERIAL_NUMBER}
 curl -fL \
   "https://calib.stereolabs.com/?SN=${ZED_SERIAL}" \
@@ -59,12 +59,69 @@ Unitree nmcli, make sure plugged into main Ethernet port
 Build the image and run the container
 ```bash
 sudo docker compose build
+```
+
+Install `ground_common` Repositories
+```bash
+mkdir -p ground_ws/src
+
+docker compose run --rm ground_bringup bash -lc '
+    vcs import \
+        /root/ground_ws/src \
+        < /etc/ground/ground.repos
+'
+```
+
+Build workspace
+```bash
+docker compose run --rm ground_bringup bash -lc '
+    cd /root/ground_ws &&
+    colcon build \
+        --merge-install \
+        --symlink-install \
+        --cmake-args \
+            -DCMAKE_BUILD_TYPE=Release
+'
+```
+
+Run the container
+```bash
 sudo docker compose up -d
+```
+
+## Optional: Add your own package
+First, ensure that your package does not require additional dependencies to build. Then, clone your repo and build it
+```bash
+mkdir -p experiment_ws/src
+git clone \
+	https://github.com/<owner>/<experiment_repo>.git \
+	experiment_ws/src/<experiment-repo>
+```
+```bash
+docker compose \
+    -f docker-compose.yml \
+    -f sample.experiment.yml \
+    run --rm --no-deps your_experiment bash -lc '
+        cd /root/experiment_ws &&
+        colcon build \
+            --merge-install \
+            --symlink-install \
+            --cmake-args \
+                -DCMAKE_BUILD_TYPE=Release
+    '
+```
+
+Lastly, start both containers
+```bash
+docker compose \
+    -f docker-compose.yml \
+    -f sample.experiment.yml \
+    up -d
 ```
 
 ## Optional: Auto-start on boot
 ```bash
-sudo chmod +x /scripts/setup-autostart.sh
+chmod +x scripts/setup-autostart.sh
 sudo ./scripts/setup-autostart.sh
 ```
 

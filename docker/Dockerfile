@@ -9,6 +9,7 @@ FROM ${BASE_IMAGE}
 ARG ROS_DISTRO=humble
 ENV ROS_DISTRO=${ROS_DISTRO}
 ENV GROUND_WS=/root/ground_ws
+ENV EXPERIMENT_WS=/root/experiment_ws
 
 SHELL ["/bin/bash", "-c"]
 
@@ -30,31 +31,26 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN python3 -m pip install --no-cache-dir --index-url https://pypi.org/simple nmea-parser==0.5.0
 
-RUN mkdir -p $GROUND_WS
+RUN mkdir -p ${GROUND_WS}
+RUN mkdir -p ${EXPERIMENT_WS}
+RUN mkdir -p /etc/ground
 
-WORKDIR ${GROUND_WS}
-
-COPY config/ground.repos /tmp/ground.repos
-
-RUN mkdir -p src && \
-    vcs import src < /tmp/ground.repos
+RUN mkdir -p /tmp/ground_ws/src
+COPY config/ground.repos /etc/ground/ground.repos
+# Temporary clone so rosdep can get dependencies from package.xml
+# This workspace is deleted after the image is build
+RUN vcs import /tmp/ground_ws/src < /etc/ground/ground.repos
     
 # rosdep
 RUN apt-get update && \
     source /opt/ros/${ROS_DISTRO}/setup.bash && \
     rosdep install \
-        --from-paths ${GROUND_WS}/src \
+        --from-paths /tmp/ground_ws/src \
         --ignore-src \
         --rosdistro ${ROS_DISTRO} \
         -r -y && \
-    rm -rf /var/lib/apt/lists/*
-
-# Build workspace
-RUN source /opt/ros/${ROS_DISTRO}/setup.bash && \
-    colcon build \
-        --merge-install \
-        --cmake-args \
-            -DCMAKE_BUILD_TYPE=Release
+    rm -rf /var/lib/apt/lists/* && \
+    rm -rf /tmp/ground_ws
 
 # Fast DDS Discovery Server super-client profile.
 COPY config/fastdds/super_client_config.xml \
