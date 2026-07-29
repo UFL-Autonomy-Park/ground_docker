@@ -8,6 +8,7 @@ x-ground-common: &ground-common
   volumes:
     - /dev:/dev
     - ./ground_ws:/root/ground_ws
+    - ./config/fastdds:/etc/fastdds
     - ./config/zed/SN${ZED_SERIAL}.conf:/usr/local/zed/settings/SN${ZED_SERIAL}.conf:ro
     - zed_resources:/usr/local/zed/resources
 

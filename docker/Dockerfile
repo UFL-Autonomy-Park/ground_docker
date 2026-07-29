@@ -52,10 +52,6 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /tmp/ground_ws
 
-# Fast DDS Discovery Server super-client profile.
-COPY config/fastdds/super_client_config.xml \
-    /etc/fastdds/super_client_config.xml
-
 COPY docker/ros_entrypoint.sh \
     /sbin/ground_ros_entrypoint.sh
 
