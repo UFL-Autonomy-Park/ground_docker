@@ -3,8 +3,8 @@
 set -euo pipefail
 
 PROFILE_NAME="velodyne"
-HOST_ADDRESS="192.168.2.100/24"
-LIDAR_ADDRESS="192.168.2.201"
+HOST_ADDRESS="192.168.3.100/24"
+LIDAR_ADDRESS="192.168.3.201"
 
 if [[ $# -ne 1 ]]; then
     echo "Usage: sudo $0 <USB-Ethernet-interface>"
