@@ -40,6 +40,7 @@ services:
       - minimal_startup_ground
       - robot.launch.py
       - "platform:=${PLATFORM}"
+      - "launch_platform:=${LAUNCH_PLATFORM}"
       - "model:=${MODEL}"
       - "robot_namespace:=${ROBOT_NAMESPACE}"
       - "launch_microstrain:=${LAUNCH_MICROSTRAIN}"
@@ -49,6 +50,11 @@ services:
       - "zed_camera_name:=${ZED_CAMERA_NAME}"
       - "zed_namespace:=${ZED_NAMESPACE}"
       - "launch_velodyne:=${LAUNCH_VELODYNE}"
+      - "velodyne_model:=${VELODYNE_MODEL}"
+      - "velodyne_rpm:=${VELODYNE_RPM}"
+      - "velodyne_ip:=${VELODYNE_IP}"
+      - "velodyne_port:=${VELODYNE_PORT}"
+      - "launch_holo_interp:=${LAUNCH_HOLO_INTERP}"
 
 volumes:
   zed_resources:
