@@ -64,7 +64,7 @@ Install `ground_common` Repositories
 ```bash
 mkdir -p ground_ws/src
 
-docker compose run --rm ground_bringup bash -lc '
+sudo docker compose run --rm ground_bringup bash -lc '
     vcs import \
         /root/ground_ws/src \
         < /etc/ground/ground.repos
@@ -73,7 +73,7 @@ docker compose run --rm ground_bringup bash -lc '
 
 Build workspace
 ```bash
-docker compose run --rm ground_bringup bash -lc '
+sudo docker compose run --rm ground_bringup bash -lc '
     cd /root/ground_ws &&
     colcon build \
         --merge-install \
